@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "native-app",
+    "jsEngine": "hermes",
     "slug": "native-app",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -15,13 +16,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "jsEngine": "jsc"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.anonymous.nativeapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
