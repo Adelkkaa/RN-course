@@ -4,11 +4,12 @@ import { Colors, Gaps } from "./shared/tokens";
 import Button from "./shared/Button/Button";
 import { useEffect, useState } from "react";
 import { ErrorNotification } from "./shared/ErrorNotification/ErrorNotification";
+import { StatusBar } from "expo-status-bar";
 
 export default function App() {
   const [error, setError] = useState<string>("");
   const alert = () => {
-    setError("Неверный логин и пароль");
+    setError("Неверный логин или пароль");
   };
 
   useEffect(() => {
@@ -34,6 +35,7 @@ export default function App() {
         </View>
         <Text>Восстановить пароль!</Text>
       </View>
+	  <StatusBar style="inverted" backgroundColor={Colors.black}/>
     </View>
   );
 }
