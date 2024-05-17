@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { ErrorNotification } from '../shared/ErrorNotification/ErrorNotification';
 import { Link } from 'expo-router';
 
-export default function App() {
+export default function Login() {
 	const [error, setError] = useState<string>('');
 	const alert = () => {
 		setError('Неверный логин или пароль');
