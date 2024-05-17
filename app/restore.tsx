@@ -1,14 +1,13 @@
-import { Text, SafeAreaView } from 'react-native';
-import React from 'react';
 import { Link } from 'expo-router';
+import { View, Text } from 'react-native';
+import { Colors } from '../shared/tokens';
 
 export default function Restore() {
 	return (
-		<SafeAreaView>
-			<Text>restore</Text>
+		<View>
 			<Link href={'/'}>
-				<Text>Домой</Text>
+				<Text style={{ color: Colors.white }}>Restore</Text>
 			</Link>
-		</SafeAreaView>
+		</View>
 	);
 }

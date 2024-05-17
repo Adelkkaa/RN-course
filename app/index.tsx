@@ -4,7 +4,6 @@ import { Colors, Gaps } from '../shared/tokens';
 import Button from '../shared/Button/Button';
 import { useEffect, useState } from 'react';
 import { ErrorNotification } from '../shared/ErrorNotification/ErrorNotification';
-import { StatusBar } from 'expo-status-bar';
 import { Link } from 'expo-router';
 
 export default function App() {
@@ -34,7 +33,6 @@ export default function App() {
 					<Text>Восстановить пароль!</Text>
 				</Link>
 			</View>
-			<StatusBar style="light" backgroundColor={Colors.black} />
 		</View>
 	);
 }
@@ -42,8 +40,7 @@ export default function App() {
 const styles = StyleSheet.create({
 	container: {
 		justifyContent: 'center',
-		flexGrow: 1,
-		flexBasis: '100%',
+		flex: 1,
 		padding: 55,
 		backgroundColor: Colors.black,
 	},
