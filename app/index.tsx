@@ -1,4 +1,4 @@
-import { StyleSheet, View, Image } from 'react-native';
+import { StyleSheet, View, Image, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { Input } from '../shared/Input/Input';
 import { Colors, Gaps } from '../shared/tokens';
 import Button from '../shared/Button/Button';
@@ -20,18 +20,20 @@ export default function Login() {
 		};
 	}, [error]);
 	return (
-		<View style={styles.container}>
-			<ErrorNotification error={error} />
-			<View style={styles.content}>
-				<Image style={styles.logo} source={require('../assets/logo.png')} resizeMode="contain" />
-				<View style={styles.form}>
-					<Input placeholder="Email" />
-					<Input placeholder="Пароль" isPassword={true} />
-					<Button onPress={alert} text="Войти" />
+		<TouchableWithoutFeedback onPressOut={() => Keyboard.dismiss()}>
+			<View style={styles.container}>
+				<ErrorNotification error={error} />
+				<View style={styles.content}>
+					<Image style={styles.logo} source={require('../assets/logo.png')} resizeMode="contain" />
+					<View style={styles.form}>
+						<Input placeholder="Email" />
+						<Input placeholder="Пароль" isPassword={true} />
+						<Button onPress={alert} text="Войти" />
+					</View>
+					<CustomLink href={'/restores'} text="Восстановить пароль"></CustomLink>
 				</View>
-				<CustomLink href={'/restores'} text="Восстановить пароль"></CustomLink>
 			</View>
-		</View>
+		</TouchableWithoutFeedback>
 	);
 }
 
