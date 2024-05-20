@@ -7,7 +7,6 @@ export function UserMenu({ user }: { user: IUser | null }) {
 	if (!user) {
 		return;
 	}
-	console.log(user);
 	return (
 		<View style={styles.container}>
 			{user.photo ? (
