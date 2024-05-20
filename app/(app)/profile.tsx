@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { View, Image, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { ImageUploader } from '../../shared/ImageUploader/ImageUploader';
 import { Gaps } from '../../shared/tokens';
 import { useAtom } from 'jotai';
 import { loadProfileAtom } from '../../entities/user/model/user.state';
+import { Avatar } from '../../entities/user/ui/Avatar/Avatar';
 
 export default function Profile() {
 	const [image, setImage] = useState<string | null>(null);
@@ -11,34 +12,14 @@ export default function Profile() {
 
 	return (
 		<View style={styles.container}>
-			{image ? (
-				<Image
-					style={styles.image}
-					source={{
-						uri: image,
-					}}
-				/>
-			) : profile?.profile?.photo ? (
-				<Image
-					style={styles.image}
-					source={{
-						uri: profile.profile.photo,
-					}}
-				/>
-			) : (
-				<Image source={require('../../assets/images/avatar.png')} />
-			)}
-			<ImageUploader onUpload={setImage} />
+			<Avatar image={image || profile?.profile?.photo || null} />
+
+			<ImageUploader onUpload={setImage} onError={(e) => console.log(e)} />
 		</View>
 	);
 }
 
 const styles = StyleSheet.create({
-	image: {
-		width: 70,
-		height: 70,
-		borderRadius: 35,
-	},
 	container: {
 		flexDirection: 'row',
 		gap: Gaps.g20,
