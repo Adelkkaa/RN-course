@@ -5,6 +5,7 @@ import { useFonts } from 'expo-font';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { useEffect } from 'react';
 import * as SplashScreen from 'expo-splash-screen';
+import { Notificaiton } from '../shared/Notification/Notification';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -32,6 +33,7 @@ export default function RootRayout() {
 	}
 	return (
 		<SafeAreaProvider>
+			<Notificaiton />
 			<StatusBar style="light" backgroundColor={Colors.black} />
 			<Stack
 				screenOptions={{

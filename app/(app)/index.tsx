@@ -1,13 +1,15 @@
-import { View, StyleSheet, FlatList, RefreshControl } from 'react-native';
+import { View, StyleSheet, FlatList, ActivityIndicator, RefreshControl } from 'react-native';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { courseAtom, loadCourseAtom } from '../../entities/course/model/course.state';
 import { useEffect } from 'react';
-import { CourseCard } from '../../widgets/course/ui/CourseCard/CourseCard';
 import { StudentCourseDescription } from '../../entities/course/model/course.model';
 import { Colors } from '../../shared/tokens';
+import * as Notificaitons from 'expo-notifications';
+import { CourseCard } from '../../widgets/course/ui/CourseCard/CourseCard';
+import Button from '../../shared/Button/Button';
 
 export default function MyCourses() {
-	const { isLoading, error, courses } = useAtomValue(courseAtom);
+	const { isLoading, courses } = useAtomValue(courseAtom);
 	const loadCourse = useSetAtom(loadCourseAtom);
 
 	useEffect(() => {
@@ -22,8 +24,46 @@ export default function MyCourses() {
 		);
 	};
 
+	const allowsNotification = async () => {
+		const settings = await Notificaitons.getPermissionsAsync();
+		return (
+			settings.granted || settings.ios?.status == Notificaitons.IosAuthorizationStatus.PROVISIONAL
+		);
+	};
+
+	const requestPermissions = async () => {
+		return Notificaitons.requestPermissionsAsync({
+			ios: {
+				allowAlert: true,
+				allowBadge: true,
+				allowSound: true,
+			},
+		});
+	};
+
+	const scheduleNotification = async () => {
+		const granted = await allowsNotification();
+		if (!granted) {
+			await requestPermissions();
+		}
+		Notificaitons.scheduleNotificationAsync({
+			content: {
+				title: 'Новый курс TypeScript',
+				body: 'Начни учиться уже сейчас!',
+				data: { alias: 'typescript' },
+			},
+			trigger: {
+				seconds: 5,
+			},
+		});
+	};
+
 	return (
 		<>
+			{isLoading && (
+				<ActivityIndicator style={styles.activity} size="large" color={Colors.primary} />
+			)}
+			<Button text="Напомнить" onPress={scheduleNotification} />
 			{courses.length > 0 && (
 				<FlatList
 					refreshControl={
@@ -32,7 +72,6 @@ export default function MyCourses() {
 							titleColor={Colors.primary}
 							refreshing={isLoading}
 							onRefresh={loadCourse}
-							style={styles.activity}
 						/>
 					}
 					data={courses}
