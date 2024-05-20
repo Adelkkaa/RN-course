@@ -1,5 +1,14 @@
 /* eslint-disable react-native/no-inline-styles */
-import { StyleSheet, View, Image, Dimensions } from 'react-native';
+import {
+	StyleSheet,
+	View,
+	Image,
+	Dimensions,
+	KeyboardAvoidingView,
+	Keyboard,
+	TouchableWithoutFeedback,
+	Platform,
+} from 'react-native';
 import { Input } from '../shared/Input/Input';
 import { Colors, Gaps } from '../shared/tokens';
 import { ErrorNotification } from '../shared/ErrorNotification/ErrorNotification';
@@ -44,44 +53,49 @@ export default function Login() {
 	}, [access_token]);
 
 	return (
-		<View style={styles.container}>
-			<ErrorNotification error={localError} />
-			<View style={styles.content}>
-				<Image style={styles.logo} source={require('../assets/logo.png')} resizeMode="contain" />
-				<View style={styles.form}>
-					<View
-						style={{
-							...styles.inputs,
-							flexDirection: orientation === Orientation.PORTRAIT_UP ? 'column' : 'row',
-						}}
-					>
-						<Input
+		<TouchableWithoutFeedback onPressOut={() => Keyboard.dismiss()}>
+			<View style={styles.container}>
+				<ErrorNotification error={localError} />
+				<KeyboardAvoidingView
+					behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+					style={styles.content}
+				>
+					<Image style={styles.logo} source={require('../assets/logo.png')} resizeMode="contain" />
+					<View style={styles.form}>
+						<View
 							style={{
-								width:
-									orientation === Orientation.PORTRAIT_UP
-										? 'auto'
-										: Dimensions.get('window').width / 2 - 16 - 48,
+								...styles.inputs,
+								flexDirection: orientation === Orientation.PORTRAIT_UP ? 'column' : 'row',
 							}}
-							placeholder="Email"
-							onChangeText={setEmail}
-						/>
-						<Input
-							style={{
-								width:
-									orientation === Orientation.PORTRAIT_UP
-										? 'auto'
-										: Dimensions.get('window').width / 2 - 16 - 48,
-							}}
-							isPassword
-							placeholder="Пароль"
-							onChangeText={setPassword}
-						/>
+						>
+							<Input
+								style={{
+									width:
+										orientation === Orientation.PORTRAIT_UP
+											? 'auto'
+											: Dimensions.get('window').width / 2 - 16 - 48,
+								}}
+								placeholder="Email"
+								onChangeText={setEmail}
+							/>
+							<Input
+								style={{
+									width:
+										orientation === Orientation.PORTRAIT_UP
+											? 'auto'
+											: Dimensions.get('window').width / 2 - 16 - 48,
+								}}
+								isPassword
+								placeholder="Пароль"
+								onChangeText={setPassword}
+							/>
+						</View>
+						<Button text="Войти" onPress={submit} isLoading={isLoading} />
 					</View>
-					<Button text="Войти" onPress={submit} isLoading={isLoading} />
-				</View>
-				<CustomLink href={'/restore'} text="Восстановить пароль" />
+					<CustomLink href={'/restore'} text="Восстановить пароль" />
+				</KeyboardAvoidingView>
 			</View>
-		</View>
+		</TouchableWithoutFeedback>
 	);
 }
 
