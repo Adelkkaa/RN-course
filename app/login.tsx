@@ -13,7 +13,7 @@ export default function Login() {
 	const [localError, setLocalError] = useState<string>('');
 	const [email, setEmail] = useState<string>();
 	const [password, setPassword] = useState<string>();
-	const [{ access_token, error }, login] = useAtom(loginAtom);
+	const [{ access_token, error, isLoading }, login] = useAtom(loginAtom);
 
 	useEffect(() => {
 		const timerId = setTimeout(() => setLocalError(''), 4000);
@@ -55,7 +55,7 @@ export default function Login() {
 					<View style={styles.form}>
 						<Input placeholder="Email" onChangeText={setEmail} />
 						<Input isPassword placeholder="Пароль" onChangeText={setPassword} />
-						<Button text="Войти" onPress={submit} />
+						<Button text="Войти" isLoading={isLoading} onPress={submit} />
 					</View>
 					<CustomLink href={'/restore'} text="Восстановить пароль"></CustomLink>
 				</View>

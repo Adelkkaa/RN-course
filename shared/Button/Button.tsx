@@ -6,21 +6,21 @@ import {
   StyleSheet,
   Animated,
   GestureResponderEvent,
+  ActivityIndicator,
 } from "react-native";
 import React from "react";
 import { Colors, Fonts, Radius } from "../tokens";
 
 export default function Button({
   text,
+  isLoading = false,
   ...props
-}: PressableProps & { text: string }) {
+}: PressableProps & { text: string; isLoading?: boolean }) {
   const animatedValue = new Animated.Value(100);
   const color = animatedValue.interpolate({
     inputRange: [0, 100],
-    outputRange: [Colors.primaryHover, Colors.primary]
-  })
-
-  
+    outputRange: [Colors.primaryHover, Colors.primary],
+  });
 
   const fadeIn = (e: GestureResponderEvent) => {
     Animated.timing(animatedValue, {
@@ -28,8 +28,8 @@ export default function Button({
       duration: 100,
       useNativeDriver: false,
     }).start();
-    props.onPressIn && props.onPressIn(e)
-  }
+    props.onPressIn && props.onPressIn(e);
+  };
 
   const fadeOut = (e: GestureResponderEvent) => {
     Animated.timing(animatedValue, {
@@ -37,17 +37,18 @@ export default function Button({
       duration: 100,
       useNativeDriver: false,
     }).start();
-    props.onPressOut && props.onPressOut(e)
-  }
+    props.onPressOut && props.onPressOut(e);
+  };
   return (
     <Pressable {...props} onPressIn={fadeIn} onPressOut={fadeOut}>
       <Animated.View
         style={{
           ...styles.button,
-         backgroundColor: color
+          backgroundColor: color,
         }}
       >
-        <Text style={styles.text}>{text}</Text>
+        {!isLoading && <Text style={styles.text}>{text}</Text>}
+        {isLoading && <ActivityIndicator size="large" color={Colors.white} />}
       </Animated.View>
     </Pressable>
   );
