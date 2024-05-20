@@ -5,32 +5,59 @@ import Button from '../shared/Button/Button';
 import { useEffect, useState } from 'react';
 import { ErrorNotification } from '../shared/ErrorNotification/ErrorNotification';
 import { CustomLink } from '../shared/CustomLink/CustomLink';
+import { useAtom } from 'jotai';
+import { loginAtom } from '../entities/auth/model/auth.state';
+import { router } from 'expo-router';
 
 export default function Login() {
-	const [error, setError] = useState<string>('');
-	const alert = () => {
-		setError('Неверный логин или пароль');
-	};
+	const [localError, setLocalError] = useState<string>('');
+	const [email, setEmail] = useState<string>();
+	const [password, setPassword] = useState<string>();
+	const [{ access_token, error }, login] = useAtom(loginAtom);
 
 	useEffect(() => {
-		const timerId = setTimeout(() => setError(''), 4000);
+		const timerId = setTimeout(() => setLocalError(''), 4000);
 
 		return () => {
 			clearTimeout(timerId);
 		};
+	}, [localError]);
+
+	const submit = () => {
+		if (!email) {
+			setLocalError('Не введён email');
+			return;
+		}
+		if (!password) {
+			setLocalError('Не введён пароль');
+			return;
+		}
+		login({ email, password });
+	};
+
+	useEffect(() => {
+		if (error) {
+			setLocalError(error);
+		}
 	}, [error]);
+
+	useEffect(() => {
+		if (access_token) {
+			router.replace('/(app)');
+		}
+	}, [access_token]);
 	return (
 		<TouchableWithoutFeedback onPressOut={() => Keyboard.dismiss()}>
 			<View style={styles.container}>
-				<ErrorNotification error={error} />
+				<ErrorNotification error={localError} />
 				<View style={styles.content}>
 					<Image style={styles.logo} source={require('../assets/logo.png')} resizeMode="contain" />
 					<View style={styles.form}>
-						<Input placeholder="Email" />
-						<Input placeholder="Пароль" isPassword={true} />
-						<Button onPress={alert} text="Войти" />
+						<Input placeholder="Email" onChangeText={setEmail} />
+						<Input isPassword placeholder="Пароль" onChangeText={setPassword} />
+						<Button text="Войти" onPress={submit} />
 					</View>
-					<CustomLink href={'/restores'} text="Восстановить пароль"></CustomLink>
+					<CustomLink href={'/restore'} text="Восстановить пароль"></CustomLink>
 				</View>
 			</View>
 		</TouchableWithoutFeedback>
