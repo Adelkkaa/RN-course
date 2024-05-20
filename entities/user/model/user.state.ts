@@ -1,5 +1,5 @@
 import { atom } from 'jotai';
-import { User } from './user.model';
+import { IProfileResponse, IUser } from './user.model';
 import { authAtom } from '../../auth/model/auth.state';
 import axios, { AxiosError } from 'axios';
 import { API } from '../api/api';
@@ -22,14 +22,14 @@ export const loadProfileAtom = atom(
 			error: null,
 		});
 		try {
-			const { data } = await axios.get<User>(API.profile, {
+			const { data } = await axios.get<IProfileResponse>(API.profile, {
 				headers: {
 					Authorization: `Bearer ${access_token}`,
 				},
 			});
 			set(profileAtom, {
 				isLoading: false,
-				profile: data,
+				profile: data.profile,
 				error: null,
 			});
 		} catch (error) {
@@ -45,7 +45,7 @@ export const loadProfileAtom = atom(
 );
 
 export interface UserState {
-	profile: User | null;
+	profile: IUser | null;
 	isLoading: boolean;
 	error: string | null;
 }

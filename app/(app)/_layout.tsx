@@ -6,7 +6,7 @@ import { Colors, Fonts } from '../../shared/tokens';
 import { MenuButton } from '../../features/layout/ui/MenuButton/MenuButton';
 import { CustomDrawer } from '../../entities/layout/ui/CustomDrawer/CustomDrawer';
 
-export default function AppRayout() {
+export default function AppLayout() {
 	const { access_token } = useAtomValue(authAtom);
 	if (!access_token) {
 		return <Redirect href="/login" />;
@@ -26,7 +26,7 @@ export default function AppRayout() {
 				},
 				headerTitleStyle: {
 					color: Colors.white,
-					fontFamily: 'FiraSans',
+					fontFamily: Fonts.regular,
 					fontSize: Fonts.f20,
 				},
 				headerTitleAlign: 'center',
