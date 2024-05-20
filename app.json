@@ -3,7 +3,6 @@
     "name": "second-app",
     "slug": "second-app",
     "version": "1.0.0",
-    "orientation": "portrait",
     "backgroundColor": "#16171D", 
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
