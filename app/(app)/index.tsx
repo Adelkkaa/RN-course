@@ -1,19 +1,31 @@
-import { View, Text } from 'react-native';
-import React from 'react';
-import { useAtom, useSetAtom } from 'jotai';
-import { loginAtom, logoutAtom } from '../../entities/auth/model/auth.state';
-import Button from '../../shared/Button/Button';
+import { StyleSheet, ScrollView, View } from 'react-native';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { courseAtom, loadCourseAtom } from '../../entities/course/model/course.state';
+import { useEffect } from 'react';
+import { CourseCard } from '../../entities/course/ui/CourseCard/CourseCard';
+import { Gaps } from '../../shared/tokens';
 
-const MyCourses = () => {
-	const [auth] = useAtom(loginAtom);
+export default function MyCourses() {
+	const { isLoading, error, courses } = useAtomValue(courseAtom);
+	const loadCourse = useSetAtom(loadCourseAtom);
 
-	const logout = useSetAtom(logoutAtom);
+	useEffect(() => {
+		loadCourse();
+	}, []);
+
 	return (
-		<View>
-			<Text>{auth.access_token}</Text>
-			<Button text="Выход" onPress={logout} />
-		</View>
+		<ScrollView>
+			<View style={styles.wrapper}>
+				{courses.length > 0 && courses.map((c) => <CourseCard {...c} key={c.id} />)}
+			</View>
+		</ScrollView>
 	);
-};
+}
 
-export default MyCourses;
+const styles = StyleSheet.create({
+	wrapper: {
+		flexDirection: 'column',
+		gap: Gaps.g20,
+		padding: 20,
+	},
+});
