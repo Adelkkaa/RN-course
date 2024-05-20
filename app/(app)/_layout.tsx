@@ -6,6 +6,7 @@ import { Colors, Fonts } from '../../shared/tokens';
 import { MenuButton } from '../../features/layout/ui/MenuButton/MenuButton';
 import { CustomDrawer } from '../../widgets/layout/ui/CustomDrawer/CustomDrawer';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { StatusBar } from 'expo-status-bar';
 
 export default function AppLayout() {
 	const { access_token } = useAtomValue(authAtom);
@@ -51,6 +52,7 @@ export default function AppLayout() {
 					}}
 				/>
 			</Drawer>
+			<StatusBar backgroundColor={Colors.black} style="light" />
 		</GestureHandlerRootView>
 	);
 }
