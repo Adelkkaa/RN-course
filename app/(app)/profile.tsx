@@ -1,64 +1,49 @@
 import { useState } from 'react';
-import { View, Text, Alert, Image, StyleSheet } from 'react-native';
-import Button from '../../shared/Button/Button';
-import {
-	MediaTypeOptions,
-	PermissionStatus,
-	useMediaLibraryPermissions,
-	launchImageLibraryAsync,
-} from 'expo-image-picker';
+import { View, Image, StyleSheet } from 'react-native';
+import { ImageUploader } from '../../shared/ImageUploader/ImageUploader';
+import { Gaps } from '../../shared/tokens';
+import { useAtom } from 'jotai';
+import { loadProfileAtom } from '../../entities/user/model/user.state';
 
 export default function Profile() {
 	const [image, setImage] = useState<string | null>(null);
+	const [profile] = useAtom(loadProfileAtom);
 
-	const [mediaPermissions, requestMediaPermission] = useMediaLibraryPermissions();
-
-	const verifyMediaPermissions = async () => {
-		if (mediaPermissions?.status === PermissionStatus.UNDETERMINED) {
-			const res = await requestMediaPermission();
-			return res.granted;
-		}
-		if (mediaPermissions?.status === PermissionStatus.DENIED) {
-			Alert.alert('Недостаточно прав для доступа к камере');
-			return false;
-		}
-		return true;
-	};
-
-	const pickAvatar = async () => {
-		const permissionGranted = await verifyMediaPermissions();
-		if (!permissionGranted) {
-			return;
-		}
-		const result = await launchImageLibraryAsync({
-			mediaTypes: MediaTypeOptions.Images,
-			allowsEditing: true,
-			aspect: [1, 1],
-			quality: 0.5,
-		});
-		console.log(result);
-		if (result.assets?.length) {
-			setImage(result.assets[0].uri);
-		}
-	};
 	return (
-		<View>
-			<Text>Profile</Text>
-			<Button text="Выбрать из галлереи" onPress={pickAvatar} />
-			{image && (
+		<View style={styles.container}>
+			{image ? (
 				<Image
-					source={{ uri: image, width: 100, height: 100 }}
-					style={styles.profileImage}
-					resizeMode="contain"
+					style={styles.image}
+					source={{
+						uri: image,
+					}}
 				/>
+			) : profile?.profile?.photo ? (
+				<Image
+					style={styles.image}
+					source={{
+						uri: profile.profile.photo,
+					}}
+				/>
+			) : (
+				<Image source={require('../../assets/images/avatar.png')} />
 			)}
+			<ImageUploader onUpload={setImage} />
 		</View>
 	);
 }
 
 const styles = StyleSheet.create({
-	profileImage: {
-		width: '100%',
-		height: '100%',
+	image: {
+		width: 70,
+		height: 70,
+		borderRadius: 35,
+	},
+	container: {
+		flexDirection: 'row',
+		gap: Gaps.g20,
+		alignItems: 'center',
+		paddingHorizontal: 30,
+		paddingVertical: 20,
 	},
 });
