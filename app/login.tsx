@@ -57,7 +57,7 @@ export default function Login() {
 						<Input isPassword placeholder="Пароль" onChangeText={setPassword} />
 						<Button text="Войти" isLoading={isLoading} onPress={submit} />
 					</View>
-					<CustomLink href={'/restore'} text="Восстановить пароль"></CustomLink>
+					<CustomLink href={'/restores'} text="Восстановить пароль"></CustomLink>
 				</View>
 			</View>
 		</TouchableWithoutFeedback>
